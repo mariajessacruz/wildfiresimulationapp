@@ -1,3 +1,4 @@
+// src/pages/login.js
 import { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { useRouter } from 'next/router';
@@ -13,13 +14,14 @@ export default function Login() {
     if (error) {
       alert('Error logging in: ' + error.message);
     } else {
-      router.push('/dashboard');
+      router.push('/notification-prompt'); // Redirect to notification prompt
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100">
       <div className="w-full max-w-md bg-white rounded shadow-md p-8">
+        <h1 className="text-2xl font-semibold mb-6">Login</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700">Email Address</label>
@@ -43,38 +45,11 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
           >
             Login
           </button>
         </form>
-        <div className="mt-4 text-center">
-          <p>
-            Don't have an account?{' '}
-            <a
-              href="/signup"
-              className="text-black hover:underline"
-              onClick={(e) => {
-                e.preventDefault();
-                router.push('/signup');
-              }}
-            >
-              Sign up here
-            </a>
-          </p>
-          <p>
-            <a
-              href="/forget-password"
-              className="text-black hover:underline"
-              onClick={(e) => {
-                e.preventDefault();
-                router.push('/forget-password');
-              }}
-            >
-              Forgot password?
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );

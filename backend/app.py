@@ -1,15 +1,14 @@
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request
 import requests
 from dotenv import load_dotenv
 import os
 import torch
 from pathlib import Path
-import json
 
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__, static_folder='frontend/build')
+app = Flask(__name__)
 
 # Access the environment variables
 supabase_url = os.getenv('SUPABASE_URL')
@@ -19,14 +18,6 @@ supabase_headers = {
     "Authorization": f"Bearer {supabase_key}",
     "Content-Type": "application/json"
 }
-
-# Load locality filter data
-<<<<<<< HEAD
-with open('data/locality_filter_data.json') as f:
-=======
-with open('data/locality_filter_data.json) as f:
->>>>>>> cb3e0a728c2598b906c77011989456eccadbbefd
-    locality_filter_data = json.load(f)
 
 # Load the Wildfire Simulation Model
 class WildfireSimulationModel:
@@ -43,16 +34,12 @@ class WildfireSimulationModel:
         return prediction
 
 # Load your model (make sure the path is correct)
-<<<<<<< HEAD
-model_path = Path('model/best-checkpoint.ckpt')
-=======
-model_path = Path('model/best-checkpoint.ckpt')
->>>>>>> cb3e0a728c2598b906c77011989456eccadbbefd
-wildfire_model = WildfireSimulationModel(model_path)
+# model_path = Path("model/best-checkpoint.ckpt")
+# wildfire_model = WildfireSimulationModel(model_path)
 
 @app.route('/')
 def home():
-    return send_from_directory(app.static_folder, 'index.html')
+    return jsonify({"message": "Welcome to the Wildfire Simulation API"}), 200
 
 @app.route('/api/users')
 def get_users():
@@ -64,39 +51,26 @@ def get_users():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/api/locality_filters')
-def get_locality_filters():
-    try:
-        # Return the locality filter data
-        return jsonify(locality_filter_data), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+# @app.route('/api/simulation', methods=['POST'])
+# def get_simulation():
+#     try:
+#         # Validate and parse input data
+#         data = request.json
+#         if not data or 'date' not in data:
+#             return jsonify({"error": "Invalid input data"}), 400
+        
+#         # Assuming input data is properly formatted for your model
+#         predictions = wildfire_model.predict(data)
 
-@app.route('/api/simulation', methods=['POST'])
-def get_simulation():
-    try:
-        # Validate and parse input data
-        data = request.json
-        if not data or 'date' not in data:
-            return jsonify({"error": "Invalid input data"}), 400
+#         # Prepare the response with the prediction data
+#         response = {
+#             "date": str(data['date']),
+#             "predictions": predictions.tolist()  # Convert predictions to list if it's a tensor
+#         }
+#         return jsonify(response)
 
-        # Prepare the input data for the next 7 days
-        predictions = []
-        for day in range(7):
-            daily_data = data.copy()
-            daily_data['date'] += day  # Adjust date for each day
-            prediction = wildfire_model.predict(daily_data)
-            predictions.append(prediction.item())  # Convert tensor to Python number
-
-        # Prepare the response with the prediction data
-        response = {
-            "start_date": str(data['date']),
-            "predictions": predictions  # List of predictions for the next 7 days
-        }
-        return jsonify(response)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

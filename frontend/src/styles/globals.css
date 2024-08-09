@@ -1,19 +1,44 @@
 /* src/styles/globals.css */
 
-/* Existing TailwindCSS and other styles */
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map-header {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1px;
+  z-index: 10;
+}
+
+.date-picker-wrapper {
+  margin-left: .1px;
+}
+
+.date-picker-wrapper input {
+  padding: 0.5rem;
+  font-size: 1 rem;
+}
 
 .legend {
   display: flex;
-  gap: 0; /* Adjust spacing between legends to zero for tight fit */
+  gap: .1px;
 }
 
 .legend span {
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem 0.25rem 0 0;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.1rem;
   color: white;
   font-weight: bold;
-  flex: 1; /* Ensures all items are of equal width */
-  text-align: center; /* Center the text inside each legend */
+  text-align: center;
+  font-size: 0.8rem;
 }
 
 .legend .low {
@@ -34,4 +59,18 @@
 
 .legend .extreme {
   background-color: #6f42c1; /* Purple */
+}
+
+form {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+}
+
+form input {
+  flex-grow: 1;
+}
+
+form button {
+  flex-shrink: 0;
 }

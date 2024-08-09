@@ -1,4 +1,3 @@
-// src/pages/index.js
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { useRouter } from 'next/router';
@@ -14,7 +13,7 @@ export default function Home() {
         if (error) throw error;
         
         if (session) {
-          router.push('/dashboard');
+          router.push('/NotificationPrompt');  // Redirect to the notification prompt page
         } else {
           router.push('/login');
         }
