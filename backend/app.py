@@ -21,7 +21,11 @@ supabase_headers = {
 }
 
 # Load locality filter data
+<<<<<<< HEAD
 with open('data/locality_filter_data.json') as f:
+=======
+with open('data/locality_filter_data.json) as f:
+>>>>>>> cb3e0a728c2598b906c77011989456eccadbbefd
     locality_filter_data = json.load(f)
 
 # Load the Wildfire Simulation Model
@@ -39,7 +43,11 @@ class WildfireSimulationModel:
         return prediction
 
 # Load your model (make sure the path is correct)
+<<<<<<< HEAD
 model_path = Path('model/best-checkpoint.ckpt')
+=======
+model_path = Path('model/best-checkpoint.ckpt')
+>>>>>>> cb3e0a728c2598b906c77011989456eccadbbefd
 wildfire_model = WildfireSimulationModel(model_path)
 
 @app.route('/')
