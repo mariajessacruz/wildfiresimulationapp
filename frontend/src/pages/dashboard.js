@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Papa from 'papaparse'; // Import PapaParse to read CSV file
 
 export default function Dashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date('2024-01-30'));
   const [location, setLocation] = useState('');
   const [mapSrc, setMapSrc] = useState('');
-  const [predictions, setPredictions] = useState([]); // New state for predictions
+  const [predictions, setPredictions] = useState([]); // State for predictions
   const router = useRouter();
   const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -28,6 +29,7 @@ export default function Dashboard() {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    fetchPredictions(date);
   };
 
   const handleLocationSearch = async (e) => {
@@ -58,18 +60,21 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    // Commented out prediction fetching logic for now, to be implemented when data is available
-    // const fetchPredictions = async () => {
-    //   if (location) { // Ensure location is defined before making the request
-    //     const response = await fetch(`/api/predict?date=${selectedDate}&location=${location}`);
-    //     const data = await response.json();
-    //     setPredictions(data.predictions);
-    //   }
-    // };
+  const fetchPredictions = (date) => {
+    Papa.parse('/historical_07_12.csv', {
+        download: true,
+        header: true,
+        complete: (result) => {
+            console.log(result.data); // Debugging line
+            const filteredData = result.data.filter((row) => {
+                const rowDate = new Date(`${row.year}-${row.month}-${row.day}`);
+                return rowDate >= date && rowDate <= new Date(date.getTime() + 6 * 24 * 60 * 60 * 1000);
+            });
+            setPredictions(filteredData);
+        },
+    });
+};
 
-    // fetchPredictions();
-  }, [selectedDate, location]);
 
   return (
     <Layout>
@@ -118,7 +123,18 @@ export default function Dashboard() {
           Search
         </button>
       </form>
-      {/* <div>Predictions: {JSON.stringify(predictions)}</div> */}
+      
+      {/* Prediction Dashboard */}
+      <div className="prediction-dashboard mt-8">
+        <h2>7-Day Wildfire Forecast</h2>
+        <ul>
+          {predictions.map((prediction, index) => (
+            <li key={index}>
+              {prediction.date}: {prediction.location} - CFB: {prediction.cfb}
+            </li>
+          ))}
+        </ul>
+      </div>
     </Layout>
   );
 }

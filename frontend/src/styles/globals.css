@@ -122,3 +122,42 @@ button {
   width: 120px; /* Width of the search button */;
   color: blue
 }
+.forecast-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.forecast-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.forecast-date, .forecast-location, .forecast-cfb {
+  flex: 1;
+}
+
+.forecast-cfb.low {
+  color: green;
+}
+
+.forecast-cfb.medium {
+  color: orange;
+}
+
+.forecast-cfb.high {
+  color: red;
+}
+
+.forecast-cfb.very-high {
+  color: darkred;
+}
+
+.forecast-cfb.extreme {
+  color: purple;
+}
